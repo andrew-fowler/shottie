@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action="" method="post" name="login">
+        {{ form.hidden_tag() }}
+        <p>
+            Saucelabs Username:<br>
+            {{ form.username(size=80) }}<br>
+            {% for error in form.username.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Saucelabs Access Key:<br>
+            {{ form.accesskey(size=80) }}<br>
+            {% for error in form.accesskey.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Saucelabs Tunnel Name:<br>
+            {{ form.tunnelname(size=80) }}<br>
+            {% for error in form.tunnelname.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Screenshot URLs:<br>
+            {{ form.urls(size=80) }}<br>
+            {% for error in form.urls.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Platform:<br>
+            {{ form.platform(size=80) }}<br>
+            {% for error in form.platform.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Browser:<br>
+            {{ form.browser(size=80) }}<br>
+            {% for error in form.browser.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Version:<br>
+            {{ form.version(size=80) }}<br>
+            {% for error in form.version.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Device:<br>
+            {{ form.version(size=80) }}<br>
+            {% for error in form.device.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Platform:<br>
+            {{ form.select_platform() }}<br>
+            {% for error in form.select_platform.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Browser:<br>
+            {{ form.select_browser() }}<br>
+            {% for error in form.select_browser.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            Version:<br>
+            {{ form.select_version() }}<br>
+            {% for error in form.select_version.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+      </p>
+      <p><input type="submit" value="Sign In"></p>
+  </form>
+{% endblock %}

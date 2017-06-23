@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Screenshots</h1>
+    <!--<p>{{browser}}:{{url}}</p>-->
+{% for screenshot in screenshots %}
+    <img src="data:image/png;base64,{{screenshot}}" alt="Screenshot" />
+{% endfor %}
+  </form>
+{% endblock %}
