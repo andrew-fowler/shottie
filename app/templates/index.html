@@ -45,7 +45,12 @@
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
       </p>
-      <p><input type="submit" value="Submit"></p>
+        <p>{{ form.add }}</p>
+        <p>{{ form.runtests }}</p>
+      <!--<p><input name="submit_button" type="submit" value="Submit"></p>-->
+        {% for saved_combination in saved_combinations %}
+        <span><p>{{ saved_combination }}</p></span>
+        {% endfor %}
   </form>
 
 <script charset="utf-8" type="text/javascript">
@@ -60,29 +65,8 @@ $(function() {
     };
 
     // call to update on load
-    <!--updateBrowsers();-->
     updateVersions();
     updatePlatforms();
-
-    <!--// function to call XHR and update browser dropdown-->
-    <!--function updateBrowsers() {-->
-
-        <!--dropdown.browser.attr('disabled', 'disabled');-->
-        <!--dropdown.browser.empty();-->
-
-        <!--$.getJSON("_get_browser_list/"+dropdown.platform.val(), function(data) {-->
-            <!--data.forEach(function(item) {-->
-                <!--console.log("Browser Item: "+item);-->
-                <!--dropdown.browser.append(-->
-                    <!--$('<option>', {-->
-                        <!--value: item[0],-->
-                        <!--text: item[1]-->
-                    <!--})-->
-                <!--);-->
-            <!--});-->
-            <!--dropdown.browser.removeAttr('disabled');-->
-        <!--});-->
-    <!--}-->
 
     // function to call XHR and update browser dropdown
     function updateVersions() {
@@ -123,13 +107,7 @@ $(function() {
         });
     }
 
-    //// event listener to state dropdown change
-    //dropdown.platform.on('change', function() {
-    //    updateBrowsers();
-    //});
-
     dropdown.browser.on('change', function() {
-
         updateVersions();
         updatePlatforms();
     });
