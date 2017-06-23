@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <form action="" method="post" name="login">
+    <form action="" method="post" name="submit">
         {{ form.hidden_tag() }}
         <p>
             Saucelabs Username:<br>
@@ -27,27 +27,9 @@
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Platform:<br>
-            {{ form.platform(size=80) }}<br>
-            {% for error in form.platform.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}<br>
-
             Browser:<br>
-            {{ form.browser(size=80) }}<br>
-            {% for error in form.browser.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}<br>
-
-            Version:<br>
-            {{ form.version(size=80) }}<br>
-            {% for error in form.version.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}<br>
-
-            Device:<br>
-            {{ form.version(size=80) }}<br>
-            {% for error in form.device.errors %}
+            {{ form.select_browser() }}<br>
+            {% for error in form.select_browser.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
@@ -57,18 +39,102 @@
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Browser:<br>
-            {{ form.select_browser() }}<br>
-            {% for error in form.select_browser.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}<br>
-
             Version:<br>
             {{ form.select_version() }}<br>
             {% for error in form.select_version.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
       </p>
-      <p><input type="submit" value="Sign In"></p>
+      <p><input type="submit" value="Submit"></p>
   </form>
+
+<script charset="utf-8" type="text/javascript">
+
+$(function() {
+
+    // jQuery selection for the 2 select boxes
+    var dropdown = {
+        platform: $('#select_platform'),
+        browser: $('#select_browser'),
+        version: $('#select_version')
+    };
+
+    // call to update on load
+    <!--updateBrowsers();-->
+    updateVersions();
+    updatePlatforms();
+
+    <!--// function to call XHR and update browser dropdown-->
+    <!--function updateBrowsers() {-->
+
+        <!--dropdown.browser.attr('disabled', 'disabled');-->
+        <!--dropdown.browser.empty();-->
+
+        <!--$.getJSON("_get_browser_list/"+dropdown.platform.val(), function(data) {-->
+            <!--data.forEach(function(item) {-->
+                <!--console.log("Browser Item: "+item);-->
+                <!--dropdown.browser.append(-->
+                    <!--$('<option>', {-->
+                        <!--value: item[0],-->
+                        <!--text: item[1]-->
+                    <!--})-->
+                <!--);-->
+            <!--});-->
+            <!--dropdown.browser.removeAttr('disabled');-->
+        <!--});-->
+    <!--}-->
+
+    // function to call XHR and update browser dropdown
+    function updateVersions() {
+
+        dropdown.version.attr('disabled', 'disabled');
+        dropdown.version.empty();
+
+        $.getJSON("_get_version_list/"+dropdown.browser.val(), function(data) {
+            data.forEach(function(item) {
+                dropdown.version.append(
+                    $('<option>', {
+                        value: item[0],
+                        text: item[1]
+                    })
+                );
+            });
+            dropdown.version.removeAttr('disabled');
+        });
+    }
+
+    function updatePlatforms() {
+        var send = {
+            platform: dropdown.version.val()
+        };
+        dropdown.platform.attr('disabled', 'disabled');
+        dropdown.platform.empty();
+
+        $.getJSON("_get_os_list/"+dropdown.browser.val(), function(data) {
+            data.forEach(function(item) {
+                dropdown.platform.append(
+                    $('<option>', {
+                        value: item[0],
+                        text: item[1]
+                    })
+                );
+            });
+            dropdown.platform.removeAttr('disabled');
+        });
+    }
+
+    //// event listener to state dropdown change
+    //dropdown.platform.on('change', function() {
+    //    updateBrowsers();
+    //});
+
+    dropdown.browser.on('change', function() {
+
+        updateVersions();
+        updatePlatforms();
+    });
+
+});
+
+</script>
 {% endblock %}

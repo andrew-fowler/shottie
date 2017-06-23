@@ -12,7 +12,7 @@ class ScreenShotTaker:
     timeout = 60
 
     @staticmethod
-    def get_sauce_labs_driver(browser, platform, version, device, username, accesskey, tunnelname):
+    def get_sauce_labs_driver(browser, platform, version, username, accesskey, tunnelname):
         """Gets a driver object that is used to control a session on Sauce Labs.
 
         Parameters
@@ -46,8 +46,8 @@ class ScreenShotTaker:
                 caps['screen-resolution'] = '1024x768'
             caps['version'] = version
 
-            if device is not None:
-                caps['device'] = device
+            # if device is not None:
+            #     caps['device'] = device
 
             caps['name'] = "Saucelabs Screenshot Tool"
             caps['commandTimeout'] = ScreenShotTaker.timeout * 2
@@ -69,7 +69,7 @@ class ScreenShotTaker:
                 app.logger.error('Error: {0}\nDetails: {1}\nCaps: {2}'.format(e.reason, e.__class__.__name__, caps))
                 return None
             except Exception as e:
-                app.logger.error('Error: {0}\nDetails: {1}\nCaps: {2}'.format(e.__cause__, e.__class__.__name__, caps))
+                app.logger.error('Error: {0}\nDetails: {1}\nCaps: {2}'.format(e.msg, e.__class__.__name__, caps))
                 return None
 
             return driver
@@ -78,3 +78,14 @@ class ScreenShotTaker:
                 "HTTPError raised while trying to connect to SauceLabs:\n {0} {1}".format(str(e), "SAUCELABS_HUB_URL"))
             app.logger.error("Exception raised while trying to initialise a driver for SauceLabs: " + str(e))
             raise
+
+    @staticmethod
+    def take_screenshot(username, accesskey, tunnelname, browser, platform, version, url):
+        driver = ScreenShotTaker.get_sauce_labs_driver(username=username, accesskey=accesskey,
+                                                       tunnelname=tunnelname, browser=browser,
+                                                       platform=platform, version=version)
+        if driver:
+            driver.get(url)
+            screenshot = driver.get_screenshot_as_base64()
+            driver.quit()
+            return screenshot
