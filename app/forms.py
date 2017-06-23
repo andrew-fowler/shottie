@@ -6,8 +6,8 @@ from app.logic.sauceapi import SauceAPI
 
 
 class SessionForm(Form):
-    username = StringField('username', validators=[DataRequired()], default="LBG_PENSION_USER")
-    accesskey = StringField('accesskey', validators=[DataRequired()], default='4f2a1885-a5cb-4bcd-9fed-f8895b75731d')
+    username = StringField('username', validators=[DataRequired()], default="")
+    accesskey = StringField('accesskey', validators=[DataRequired()], default='')
     tunnelname = StringField('tunnelname')
     urls = StringField('urls', validators=[DataRequired()], default='http://www.google.com, http://www.msn.com')
     # platform = StringField('platform', validators=[DataRequired()], default='Windows 10')
