@@ -1,4 +1,6 @@
+from flask import make_response
 from flask import render_template, jsonify
+from flask import request
 from flask import session
 from werkzeug.utils import redirect
 
@@ -7,7 +9,8 @@ from app.forms import SessionForm
 from app.logic.sauceclient import SauceClient
 from app.logic.shotter import ScreenShotTaker
 
-saved_combinations = []
+# saved_combinations = []
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -20,7 +23,22 @@ def index():
 
     if form.validate_on_submit():
         if form.add.data:
-            saved_combinations.append({form.select_browser.data, form.select_platform.data, form.select_version.data})
+            record_to_add = {form.select_browser.data, form.select_platform.data, form.select_version.data}
+
+            if 'saved_combinations' in request.cookies:
+                import ast
+                saved_combinations = ast.literal_eval(request.cookies.get("saved_combinations"))
+                saved_combinations.append(record_to_add)
+                resp = make_response(render_template('index.html', title='Home', form=form, saved_combinations=saved_combinations))
+                resp.set_cookie('saved_combinations', str(saved_combinations))
+            else:
+                saved_combinations = [record_to_add]
+                resp = make_response(render_template('index.html', title='Home', form=form, saved_combinations=saved_combinations))
+                resp.set_cookie('saved_combinations', str(saved_combinations))
+
+            # saved_combinations.append(record_to_add)
+
+            return resp
         elif form.runtests.data:
             session['username'] = str(form.username.data)
             session['accesskey'] = str(form.accesskey.data)
@@ -32,7 +50,8 @@ def index():
 
             return redirect('/screenshot')
 
-    return render_template('index.html', title='Home', form=form, saved_combinations=saved_combinations)
+    return render_template('index.html', title='Home', form=form)
+    # return render_template('index.html', title='Home', form=form, saved_combinations=saved_combinations)
 
 
 @app.route('/screenshot', methods=['GET', 'POST'])
