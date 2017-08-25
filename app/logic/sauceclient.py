@@ -44,7 +44,9 @@ class SauceClient:
         return version_list
 
     @staticmethod
-    def is_combination_supported(os, browser):
+    def is_combination_supported(os, browser, version):
         if os == "Linux" and browser == "Google Chrome":
+            return False
+        if version == "dev" or version == "beta":
             return False
         return True

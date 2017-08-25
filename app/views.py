@@ -76,7 +76,9 @@ def _get_version_list(browser):
     for platform in SauceClient.get_platforms():
         if platform['api_name'] == browser and not (
                 platform['short_version'], platform['short_version']) in version_list:
-            version_list.append((platform['short_version'], platform['short_version']))
+            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'],
+                                                    version=platform['short_version']):
+                version_list.append((platform['short_version'], platform['short_version']))
 
     version_list.sort(key=lambda tup: tup[1], reverse=True)
 
@@ -88,7 +90,7 @@ def _get_os_list(browser):
     os_list = []
     for platform in SauceClient.get_platforms():
         if platform['api_name'] == browser and not (platform['os'], platform['os']) in os_list:
-            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name']):
+            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'], version=platform['short_version']):
                 os_list.append((platform['os'], platform['os']))
 
     os_list.sort(key=lambda tup: tup[1])
