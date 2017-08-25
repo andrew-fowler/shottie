@@ -55,7 +55,6 @@ def take_screenshot():
 
     return render_template('screenshots.html', title='screenshots',
                            url=urls,
-                           browser=combination['browser'],
                            screenshots=screenshots)
 
 
