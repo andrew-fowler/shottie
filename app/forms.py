@@ -14,4 +14,5 @@ class SessionForm(Form):
     select_version = SelectField('select_version', choices=[], id='select_version', coerce=str)
 
     add = SubmitField(label="Add Combination")
+    clear = SubmitField(label="Clear Combinations")
     runtests = SubmitField(label="Run Tests")

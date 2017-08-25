@@ -81,6 +81,7 @@ class ScreenShotTaker:
 
     @staticmethod
     def take_screenshot(username, accesskey, tunnelname, browser, platform, version, url):
+        print(f"Taking screenshot: {browser} {version} {platform}")
         driver = ScreenShotTaker.get_sauce_labs_driver(username=username, accesskey=accesskey,
                                                        tunnelname=tunnelname, browser=browser,
                                                        platform=platform, version=version)
