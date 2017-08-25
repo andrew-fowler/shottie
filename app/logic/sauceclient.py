@@ -36,8 +36,9 @@ class SauceClient:
     def get_version_list():
         version_list = []
         for platform in SauceClient.get_platforms():
-            if (platform['short_version'], platform['short_version']) not in version_list:
-                version_list.append((platform['short_version'], platform['short_version']))
+            version = platform['short_version']
+            if (version, version) not in version_list:
+                version_list.append((version, version))
 
         version_list.sort(key=lambda tup: tup[1], reverse=True)
         return version_list
