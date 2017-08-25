@@ -4,12 +4,6 @@ import requests
 class SauceClient:
     platform_json = ""
 
-    # Example platforms/webdriver response:
-    #       {'short_version': '15', 'long_name': 'Microsoft Edge',
-    #       'api_name': 'microsoftedge', 'long_version': '15.15063.',
-    #       'latest_stable_version': '', 'automation_backend': 'webdriver', 'os': 'Windows 10'}
-
-
     @staticmethod
     def get_platforms():
         if SauceClient.platform_json == "":
@@ -17,3 +11,39 @@ class SauceClient:
             SauceClient.platform_json = requests.get(url).json()
             print(SauceClient.platform_json)
         return SauceClient.platform_json
+
+    @staticmethod
+    def get_os_list():
+        os_list = []
+        for platform in SauceClient.get_platforms():
+            if (platform['os'], platform['os']) not in os_list:
+                os_list.append((platform['os'], platform['os']))
+
+        os_list.sort(key=lambda tup: tup[1])
+        return os_list
+
+    @staticmethod
+    def get_browser_list():
+        browser_list = []
+        for platform in SauceClient.get_platforms():
+            if (platform['api_name'], platform['long_name']) not in browser_list:
+                browser_list.append((platform['api_name'], platform['long_name']))
+
+        browser_list.sort(key=lambda tup: tup[1])
+        return browser_list
+
+    @staticmethod
+    def get_version_list():
+        version_list = []
+        for platform in SauceClient.get_platforms():
+            if (platform['short_version'], platform['short_version']) not in version_list:
+                version_list.append((platform['short_version'], platform['short_version']))
+
+        version_list.sort(key=lambda tup: tup[1], reverse=True)
+        return version_list
+
+    @staticmethod
+    def is_combination_supported(os, browser):
+        if os == "Linux" and browser == "Google Chrome":
+            return False
+        return True

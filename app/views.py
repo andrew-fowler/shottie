@@ -4,6 +4,9 @@ from werkzeug.utils import redirect
 
 from app import app
 from app.forms import SessionForm
+from app.logic.session_access import get_urls_from_session, get_combinations_from_session, get_tunnelname_from_session, \
+    get_access_key_from_session, get_username_from_session
+from app.logic.session_handler import clear_saved_combinations, add_new_combination, persist_run_inputs
 from app.logic.sauceclient import SauceClient
 from app.logic.shotter import ScreenShotTaker
 
@@ -13,50 +16,35 @@ from app.logic.shotter import ScreenShotTaker
 def index():
     form = SessionForm()
 
-    form.select_browser.choices = get_browser_list()
-    form.select_platform.choices = get_os_list()
-    form.select_version.choices = get_version_list()
+    form.select_browser.choices = SauceClient.get_browser_list()
+    form.select_platform.choices = SauceClient.get_os_list()
+    form.select_version.choices = SauceClient.get_version_list()
 
     if form.validate_on_submit():
         if form.clear.data:
-            session['saved_combinations'] = list()
+            clear_saved_combinations(session)
         elif form.add.data:
-            record_to_add = {"browser": form.select_browser.data,
-                             "platform": form.select_platform.data,
-                             "version": form.select_version.data}
-
-            if 'saved_combinations' in session:
-                saved_combinations = session['saved_combinations']
-                saved_combinations.append(record_to_add)
-                session['saved_combinations'] = saved_combinations
-            else:
-                session['saved_combinations'] = [record_to_add]
-
+            add_new_combination(form, session)
             return render_template('index.html', title='Home', form=form,
                                    saved_combinations=session['saved_combinations'])
 
         elif form.runtests.data:
-            session['username'] = str(form.username.data)
-            session['accesskey'] = str(form.accesskey.data)
-            session['tunnelname'] = str(form.tunnelname.data)
-            session['urls'] = str(form.urls.data)
-
+            persist_run_inputs(form, session)
             return redirect('/screenshot')
     else:
-        session['saved_combinations'] = list()
+        clear_saved_combinations(session)
 
     return render_template('index.html', title='Home', form=form)
 
 
 @app.route('/screenshot', methods=['GET', 'POST'])
 def take_screenshot():
-    username = session['username']
-    accesskey = session['accesskey']
-    tunnelname = session['tunnelname']
-    urls = session['urls']
-    combinations = session['saved_combinations']
+    username = get_username_from_session(session)
+    accesskey = get_access_key_from_session(session)
+    tunnelname = get_tunnelname_from_session(session)
+    combinations = get_combinations_from_session(session)
+    urls = get_urls_from_session(session)
 
-    urls = str(urls).split(',')
     screenshots = []
     for url in urls:
         for combination in combinations:
@@ -101,45 +89,46 @@ def _get_os_list(browser):
     os_list = []
     for platform in SauceClient.get_platforms():
         if platform['api_name'] == browser and not (platform['os'], platform['os']) in os_list:
-            if is_combination_supported(os=platform['os'], browser=platform['long_name']):
+            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name']):
                 os_list.append((platform['os'], platform['os']))
 
     os_list.sort(key=lambda tup: tup[1])
 
     return jsonify(os_list)
 
-
-def get_os_list():
-    os_list = []
-    for platform in SauceClient.get_platforms():
-        if (platform['os'], platform['os']) not in os_list:
-            os_list.append((platform['os'], platform['os']))
-
-    os_list.sort(key=lambda tup: tup[1])
-    return os_list
-
-
-def get_browser_list():
-    browser_list = []
-    for platform in SauceClient.get_platforms():
-        if (platform['api_name'], platform['long_name']) not in browser_list:
-            browser_list.append((platform['api_name'], platform['long_name']))
-
-    browser_list.sort(key=lambda tup: tup[1])
-    return browser_list
-
-
-def get_version_list():
-    version_list = []
-    for platform in SauceClient.get_platforms():
-        if (platform['short_version'], platform['short_version']) not in version_list:
-            version_list.append((platform['short_version'], platform['short_version']))
-
-    version_list.sort(key=lambda tup: tup[1], reverse=True)
-    return version_list
-
-
-def is_combination_supported(os, browser):
-    if os == "Linux" and browser == "Google Chrome":
-        return False
-    return True
+#
+#
+# def get_os_list():
+#     os_list = []
+#     for platform in SauceClient.get_platforms():
+#         if (platform['os'], platform['os']) not in os_list:
+#             os_list.append((platform['os'], platform['os']))
+#
+#     os_list.sort(key=lambda tup: tup[1])
+#     return os_list
+#
+#
+# def get_browser_list():
+#     browser_list = []
+#     for platform in SauceClient.get_platforms():
+#         if (platform['api_name'], platform['long_name']) not in browser_list:
+#             browser_list.append((platform['api_name'], platform['long_name']))
+#
+#     browser_list.sort(key=lambda tup: tup[1])
+#     return browser_list
+#
+#
+# def get_version_list():
+#     version_list = []
+#     for platform in SauceClient.get_platforms():
+#         if (platform['short_version'], platform['short_version']) not in version_list:
+#             version_list.append((platform['short_version'], platform['short_version']))
+#
+#     version_list.sort(key=lambda tup: tup[1], reverse=True)
+#     return version_list
+#
+#
+# def is_combination_supported(os, browser):
+#     if os == "Linux" and browser == "Google Chrome":
+#         return False
+#     return True
