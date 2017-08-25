@@ -1,8 +1,4 @@
-import json
-
-from flask import make_response
 from flask import render_template, jsonify
-from flask import request
 from flask import session
 from werkzeug.utils import redirect
 
@@ -10,9 +6,6 @@ from app import app
 from app.forms import SessionForm
 from app.logic.sauceclient import SauceClient
 from app.logic.shotter import ScreenShotTaker
-
-
-# saved_combinations = []
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -26,10 +19,8 @@ def index():
 
     if form.validate_on_submit():
         if form.clear.data:
-            # session['saved_combinations'] = list({})
             session['saved_combinations'] = list()
         elif form.add.data:
-            # record_to_add = list({form.select_browser.data, form.select_platform.data, form.select_version.data})
             record_to_add = {"browser": form.select_browser.data,
                              "platform": form.select_platform.data,
                              "version": form.select_version.data}
@@ -45,21 +36,16 @@ def index():
                                    saved_combinations=session['saved_combinations'])
 
         elif form.runtests.data:
-            # THIS WONT WORK - NEEDS TO PULL FROM SESSION AND
             session['username'] = str(form.username.data)
             session['accesskey'] = str(form.accesskey.data)
             session['tunnelname'] = str(form.tunnelname.data)
             session['urls'] = str(form.urls.data)
-            # session['browser'] = str(form.select_browser.data)
-            # session['platform'] = str(form.select_platform.data)
-            # session['version'] = str(form.select_version.data)
 
             return redirect('/screenshot')
     else:
         session['saved_combinations'] = list()
 
     return render_template('index.html', title='Home', form=form)
-    # return render_template('index.html', title='Home', form=form, saved_combinations=saved_combinations)
 
 
 @app.route('/screenshot', methods=['GET', 'POST'])
@@ -75,7 +61,8 @@ def take_screenshot():
     for url in urls:
         for combination in combinations:
             screenshots.append(
-                ScreenShotTaker.take_screenshot(username, accesskey, tunnelname, combination['browser'], combination['platform'], combination['version'], url)
+                ScreenShotTaker.take_screenshot(username, accesskey, tunnelname, combination['browser'],
+                                                combination['platform'], combination['version'], url)
             )
 
     return render_template('screenshots.html', title='screenshots',
