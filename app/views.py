@@ -58,7 +58,7 @@ def take_screenshot():
                            screenshots=screenshots)
 
 
-@app.route('/_get_browser_list/')
+@app.route('/browsers/', methods=['GET'])
 def _get_browser_list():
     browser_list = []
     for platform in SauceClient.get_platforms():
@@ -70,7 +70,7 @@ def _get_browser_list():
     return jsonify(browser_list)
 
 
-@app.route('/_get_version_list/<browser>')
+@app.route('/versions/<browser>', methods=['GET'])
 def _get_version_list(browser):
     version_list = []
     for platform in SauceClient.get_platforms():
@@ -85,7 +85,7 @@ def _get_version_list(browser):
     return jsonify(version_list)
 
 
-@app.route('/_get_os_list/<browser>')
+@app.route('/operating_systems/<browser>', methods=['GET'])
 def _get_os_list(browser):
     os_list = []
     for platform in SauceClient.get_platforms():

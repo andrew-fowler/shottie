@@ -75,7 +75,7 @@ $(function() {
         dropdown.version.attr('disabled', 'disabled');
         dropdown.version.empty();
 
-        $.getJSON("_get_version_list/"+dropdown.browser.val(), function(data) {
+        $.getJSON("versions/"+dropdown.browser.val(), function(data) {
             data.forEach(function(item) {
                 dropdown.version.append(
                     $('<option>', {
@@ -95,7 +95,7 @@ $(function() {
         dropdown.platform.attr('disabled', 'disabled');
         dropdown.platform.empty();
 
-        $.getJSON("_get_os_list/"+dropdown.browser.val(), function(data) {
+        $.getJSON("operating_systems/"+dropdown.browser.val(), function(data) {
             data.forEach(function(item) {
                 dropdown.platform.append(
                     $('<option>', {
