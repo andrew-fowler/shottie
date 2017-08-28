@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
+    <h1>Shottie</h1>
+    <hr>
+    <h3>Instructions</h3>
     <ul>
         <li>Enter your Saucelabs username and access key</li>
         <li>Enter the URL/s you'd like to hit (comma separated)</li>
@@ -8,6 +11,7 @@
         <li>Select the browser, platform and version you want and click Add Combination</li>
         <li>Click Run Tests to start the screenshotting jobs</li>
     </ul>
+    <hr>
     <form action="" method="post" name="submit">
         {{ form.hidden_tag() }}
         <p>
