@@ -1,0 +1,1 @@
+from shottie import app as application
