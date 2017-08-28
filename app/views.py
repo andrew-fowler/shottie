@@ -1,4 +1,6 @@
+from flask import make_response
 from flask import render_template, jsonify
+from flask import request
 from flask import session
 from werkzeug.utils import redirect
 
@@ -20,6 +22,12 @@ def index():
     form.select_platform.choices = SauceClient.get_os_list()
     form.select_version.choices = SauceClient.get_version_list()
 
+    if request.cookies.get('default_sauce_access_key') is not None:
+        form.default_sauce_access_key = request.cookies.get('default_sauce_access_key')
+
+    if request.cookies.get('default_sauce_username') is not None:
+        form.default_sauce_username = request.cookies.get('default_sauce_username')
+
     if form.validate_on_submit():
         if form.clear.data:
             clear_saved_combinations(session)
@@ -34,7 +42,10 @@ def index():
     else:
         clear_saved_combinations(session)
 
-    return render_template('index.html', title='Home', form=form)
+    resp = make_response(render_template('index.html', title='Home', form=form))
+    resp.set_cookie('default_sauce_access_key', str(form.accesskey.data))
+    resp.set_cookie('default_sauce_username', str(form.username.data))
+    return resp
 
 
 @app.route('/screenshot', methods=['GET', 'POST'])
