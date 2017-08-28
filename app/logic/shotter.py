@@ -84,7 +84,7 @@ class ScreenShotTaker:
         for command in commands:
             if command != "":
                 try:
-                    cmd = f"driver.{command}"
+                    cmd = f'driver.{command}'
                     print(f"Executing command: {cmd}")
                     exec(cmd)
                 except Exception as e:
