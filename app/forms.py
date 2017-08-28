@@ -6,11 +6,12 @@ import os
 
 
 class SessionForm(Form):
-    default_urls = "http://www.google.com, http://www.msn.com"
     default_urls = "https://the-internet.herokuapp.com/"
 
-    default_commands = "find_element_by_xpath('//body')"
-    default_commands = "find_element_by_xpath('//a[@href=\"/login\"]').click()\nfind_element_by_xpath('//input[@id=\"username\"]').send_keys('Test')"
+    default_commands = "find_element_by_xpath('//a[@href=\"/login\"]').click()\n" +\
+                       "find_element_by_xpath('//input[@id=\"username\"]').send_keys('tomsmith')\n" + \
+                       "find_element_by_xpath('//input[@id=\"password\"]').send_keys('SuperSecretPassword!')\n" + \
+                        "find_element_by_xpath('//button[@type=\"submit\"]').click()"
 
     default_sauce_username = os.getenv('SAUCE_USERNAME', "")
     default_sauce_access_key = os.getenv('SAUCE_ACCESS_KEY', "")
