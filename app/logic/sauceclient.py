@@ -49,4 +49,6 @@ class SauceClient:
             return False
         if version == "dev" or version == "beta":
             return False
+        if (browser == "Google Chrome" or browser == "Firefox") and float(version) < 10:
+            return False
         return True
