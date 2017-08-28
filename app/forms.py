@@ -2,6 +2,7 @@ from flask_wtf import Form
 from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 from wtforms.widgets import TextArea
+import os
 
 
 class SessionForm(Form):
@@ -11,8 +12,11 @@ class SessionForm(Form):
     default_commands = "find_element_by_xpath('//body')"
     default_commands = "find_element_by_xpath('//a[@href=\"/login\"]').click()\nfind_element_by_xpath('//input[@id=\"username\"]').send_keys('Test')"
 
-    username = StringField('username', validators=[DataRequired()], default="LBG_PENSION_USER")
-    accesskey = StringField('accesskey', validators=[DataRequired()], default='4f2a1885-a5cb-4bcd-9fed-f8895b75731d')
+    default_sauce_username = os.getenv('SAUCE_USERNAME', "")
+    default_sauce_access_key = os.getenv('SAUCE_ACCESS_KEY', "")
+
+    username = StringField('username', validators=[DataRequired()], default=default_sauce_username)
+    accesskey = StringField('accesskey', validators=[DataRequired()], default=default_sauce_access_key)
     tunnelname = StringField('tunnelname')
     urls = StringField('urls', validators=[DataRequired()], default=default_urls)
     commands = StringField('commands', widget=TextArea(), default=default_commands)
