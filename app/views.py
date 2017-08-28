@@ -5,7 +5,7 @@ from werkzeug.utils import redirect
 from app import app
 from app.forms import SessionForm
 from app.logic.session_access import get_urls_from_session, get_combinations_from_session, get_tunnelname_from_session, \
-    get_access_key_from_session, get_username_from_session
+    get_access_key_from_session, get_username_from_session, get_commands_from_session
 from app.logic.session_handler import clear_saved_combinations, add_new_combination, persist_run_inputs
 from app.logic.sauceclient import SauceClient
 from app.logic.shotter import ScreenShotTaker
@@ -44,13 +44,14 @@ def take_screenshot():
     tunnelname = get_tunnelname_from_session(session)
     combinations = get_combinations_from_session(session)
     urls = get_urls_from_session(session)
+    commands = get_commands_from_session(session)
 
     screenshots = []
     for url in urls:
         for combination in combinations:
             screenshots.append(
                 ScreenShotTaker.take_screenshot(username, accesskey, tunnelname, combination['browser'],
-                                                combination['platform'], combination['version'], url)
+                                                combination['platform'], combination['version'], url, commands)
             )
 
     return render_template('screenshots.html', title='screenshots',

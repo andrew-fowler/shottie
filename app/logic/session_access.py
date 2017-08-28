@@ -1,4 +1,3 @@
-
 def get_username_from_session(session):
     return session['username']
 
@@ -17,3 +16,7 @@ def get_combinations_from_session(session):
 
 def get_urls_from_session(session):
     return str(session['urls']).split(',')
+
+
+def get_commands_from_session(session):
+    return session['commands'].split('\r\n')

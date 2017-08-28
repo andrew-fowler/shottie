@@ -16,6 +16,7 @@ def persist_run_inputs(form, session):
     session['accesskey'] = str(form.accesskey.data)
     session['tunnelname'] = str(form.tunnelname.data)
     session['urls'] = str(form.urls.data)
+    session['commands'] = str(form.commands.data)
 
 
 def clear_saved_combinations(session):

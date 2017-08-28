@@ -27,6 +27,12 @@
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
+            Webdriver commands:<br>
+            {{ form.commands(cols=80, rows=5) }}<br>
+            {% for error in form.urls.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+
             Browser:<br>
             {{ form.select_browser() }}<br>
             {% for error in form.select_browser.errors %}
