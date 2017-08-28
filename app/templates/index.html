@@ -15,49 +15,49 @@
     <form action="" method="post" name="submit">
         {{ form.hidden_tag() }}
         <p>
-            Saucelabs Username:<br>
+        <h5>Saucelabs Username:</h5>
             {{ form.username(class_="form-control") }}<br>
             {% for error in form.username.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Saucelabs Access Key:<br>
+        <h5>Saucelabs Access Key:</h5>
             {{ form.accesskey(class_="form-control") }}<br>
             {% for error in form.accesskey.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Saucelabs Tunnel Name:<br>
+        <h5>Saucelabs Tunnel Name:</h5>
             {{ form.tunnelname(class_="form-control") }}<br>
             {% for error in form.tunnelname.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Screenshot URLs:<br>
+        <h5>Screenshot URLs:</h5>
             {{ form.urls(class_="form-control") }}<br>
             {% for error in form.urls.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Webdriver commands:<br>
+        <h5>Webdriver commands:</h5>
             {{ form.commands(cols=80, rows=5, class_="form-control") }}<br>
             {% for error in form.urls.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Browser:<br>
+        <h5>Browser:</h5>
             {{ form.select_browser(class_="form-control") }}<br>
             {% for error in form.select_browser.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Platform:<br>
+        <h5>Platform:</h5>
             {{ form.select_platform(class_="form-control") }}<br>
             {% for error in form.select_platform.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 
-            Version:<br>
+        <h5>Version:</h5>
             {{ form.select_version(class_="form-control") }}<br>
             {% for error in form.select_version.errors %}
                 <span style="color: red;">[{{ error }}]</span>
