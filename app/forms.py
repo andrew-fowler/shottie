@@ -28,4 +28,4 @@ class SessionForm(Form):
 
     add = SubmitField(label="Add Combination")
     clear = SubmitField(label="Clear Combinations")
-    runtests = SubmitField(label="Run Tests")
+    runtests = SubmitField(label="Start Screenshotting")
