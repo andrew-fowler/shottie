@@ -84,15 +84,13 @@ class ScreenShotTaker:
         for command in commands:
             if command != "":
                 try:
-                    cmd = f'driver.{command}'
-                    print(f"Executing command: {cmd}")
-                    exec(cmd)
+                    exec(f"driver.{command}")
                 except Exception as e:
                     raise
 
     @staticmethod
-    def take_screenshot(username, accesskey, tunnelname, browser, platform, version, url, commands):
-        print(f"Taking screenshot: {browser} {version} {platform}")
+    def take_screenshot(username, accesskey, tunnelname, browser, platform, version, url, commands, results):
+        print(f"Taking screenshot: {browser} {version} {platform} - {url}")
         driver = ScreenShotTaker.get_sauce_labs_driver(username=username, accesskey=accesskey,
                                                        tunnelname=tunnelname, browser=browser,
                                                        platform=platform, version=version)
@@ -103,4 +101,5 @@ class ScreenShotTaker:
 
             screenshot = driver.get_screenshot_as_base64()
             driver.quit()
+            results.append(screenshot)
             return screenshot

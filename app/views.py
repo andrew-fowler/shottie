@@ -1,3 +1,5 @@
+from threading import Thread
+
 from flask import make_response
 from flask import render_template, jsonify
 from flask import request
@@ -58,12 +60,20 @@ def take_screenshot():
     commands = get_commands_from_session(session)
 
     screenshots = []
+    threadpool = []
+
     for url in urls:
         for combination in combinations:
-            screenshots.append(
-                ScreenShotTaker.take_screenshot(username, accesskey, tunnelname, combination['browser'],
-                                                combination['platform'], combination['version'], url, commands)
-            )
+            threadpool.append(Thread(target=ScreenShotTaker.take_screenshot,
+                                     kwargs={'username': username, 'accesskey': accesskey, 'tunnelname': tunnelname,
+                                             'browser': combination['browser'], 'platform': combination['platform'],
+                                             'version': combination['version'], 'url': url, 'commands': commands,
+                                             'results': screenshots}))
+
+    for thread in threadpool:
+        thread.start()
+    for thread in threadpool:
+        thread.join()
 
     return render_template('screenshots.html', title='screenshots',
                            url=urls,
@@ -102,7 +112,8 @@ def _get_os_list(browser):
     os_list = []
     for platform in SauceClient.get_platforms():
         if platform['api_name'] == browser and not (platform['os'], platform['os']) in os_list:
-            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'], version=platform['short_version']):
+            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'],
+                                                    version=platform['short_version']):
                 os_list.append((platform['os'], platform['os']))
 
     os_list.sort(key=lambda tup: tup[1])
