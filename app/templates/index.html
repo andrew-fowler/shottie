@@ -130,6 +130,10 @@ $(function() {
         updatePlatforms();
     });
 
+    dropdown.platform.on('change', function() {
+        updateVersions();
+    });
+
 });
 
 </script>
