@@ -8,8 +8,25 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
         integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <meta property="og:title" content="Shottie" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://shottie.herokuapp.com/" />
+    <meta property="og:image" content="http://shottie.herokuapp.com/static/logo.png" />
+
 </head>
 <body style="padding-left:30px;">
+    <div>
+        <div class="row">
+            <div>
+                <img rel="shortcut icon" src="{{ url_for('static', filename='favicon.ico') }}" height="43">
+            </div>
+            <div style="padding-left:5px;">
+                <h1>Shottie</h1>
+            </div>
+        </div>
+    </div>
+
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul>
