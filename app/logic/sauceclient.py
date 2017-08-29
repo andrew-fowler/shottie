@@ -52,6 +52,22 @@ class SauceClient:
         return version_list
 
     @staticmethod
+    def get_versions_for_os_and_browser(os, short_browser_name):
+        version_list = []
+        for platform in SauceClient.get_platforms():
+
+            version = platform['short_version']
+
+            if platform['api_name'] == short_browser_name:
+                if platform['os'] == os:
+                    if (version, version) not in version_list:
+                        if SauceClient.is_combination_supported(os, short_browser_name, version):
+                            version_list.append((version, version))
+
+        version_list.sort(key=lambda tup: tup[1], reverse=True)
+        return version_list
+
+    @staticmethod
     def is_combination_supported(os, browser, version):
         if os == "Linux" and browser == "Google Chrome":
             return False

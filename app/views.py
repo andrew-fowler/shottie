@@ -106,6 +106,20 @@ def _get_version_list(browser):
 
     return jsonify(version_list)
 
+@app.route('/versions/<os>/<browser>', methods=['GET'])
+def _get_version_list_for_os_and_browser(os, browser):
+    version_list = SauceClient.get_versions_for_os_and_browser(os, browser)
+    return jsonify(version_list)
+
+    # for platform in SauceClient.get_platforms():
+    #     if platform['api_name'] == browser and not (
+    #             platform['short_version'], platform['short_version']) in version_list:
+    #         if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'],
+    #                                                 version=platform['short_version']):
+    #             version_list.append((platform['short_version'], platform['short_version']))
+    #
+    # version_list.sort(key=lambda tup: tup[1], reverse=True)
+    # return jsonify(version_list)
 
 @app.route('/operating_systems/<browser>', methods=['GET'])
 def _get_os_list(browser):

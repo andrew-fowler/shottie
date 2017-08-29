@@ -39,15 +39,13 @@ class ScreenShotTaker:
             caps = dict()
             caps['browserName'] = browser
             caps['platform'] = platform
-            # or 'OS X' in platform
+
             if 'Windows' in platform:
                 caps['screen-resolution'] = '1280x1024'
             elif platform in ['Linux']:
                 caps['screen-resolution'] = '1024x768'
             caps['version'] = version
 
-            # if device is not None:
-            #     caps['device'] = device
 
             caps['name'] = "Saucelabs Screenshot Tool"
             caps['commandTimeout'] = ScreenShotTaker.timeout * 2
@@ -56,7 +54,6 @@ class ScreenShotTaker:
             caps['locationContextEnabled'] = False
             caps['username'] = username
             caps['accessKey'] = accesskey
-            # caps['parent-tunnel'] = SAUCE_PARENT_ACCOUNT
             caps['tunnel-identifier'] = tunnelname
             caps['deviceScreenshot'] = True
 

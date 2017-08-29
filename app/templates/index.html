@@ -97,7 +97,7 @@ $(function() {
         dropdown.version.attr('disabled', 'disabled');
         dropdown.version.empty();
 
-        $.getJSON("versions/"+dropdown.browser.val(), function(data) {
+        $.getJSON("versions/"+ dropdown.platform.val() +"/"+dropdown.browser.val(), function(data) {
             data.forEach(function(item) {
                 dropdown.version.append(
                     $('<option>', {
