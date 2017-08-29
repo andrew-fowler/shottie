@@ -82,54 +82,17 @@ def take_screenshot():
 
 @app.route('/browsers/', methods=['GET'])
 def _get_browser_list():
-    browser_list = []
-    for platform in SauceClient.get_platforms():
-        if not (platform['api_name'], platform['long_name']) in browser_list:
-            browser_list.append((platform['api_name'], platform['long_name']))
-
-    browser_list.sort(key=lambda tup: tup[1])
-
+    browser_list = SauceClient.get_browser_list()
     return jsonify(browser_list)
 
-
-@app.route('/versions/<browser>', methods=['GET'])
-def _get_version_list(browser):
-    version_list = []
-    for platform in SauceClient.get_platforms():
-        if platform['api_name'] == browser and not (
-                platform['short_version'], platform['short_version']) in version_list:
-            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'],
-                                                    version=platform['short_version']):
-                version_list.append((platform['short_version'], platform['short_version']))
-
-    version_list.sort(key=lambda tup: tup[1], reverse=True)
-
-    return jsonify(version_list)
 
 @app.route('/versions/<os>/<browser>', methods=['GET'])
 def _get_version_list_for_os_and_browser(os, browser):
     version_list = SauceClient.get_versions_for_os_and_browser(os, browser)
     return jsonify(version_list)
 
-    # for platform in SauceClient.get_platforms():
-    #     if platform['api_name'] == browser and not (
-    #             platform['short_version'], platform['short_version']) in version_list:
-    #         if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'],
-    #                                                 version=platform['short_version']):
-    #             version_list.append((platform['short_version'], platform['short_version']))
-    #
-    # version_list.sort(key=lambda tup: tup[1], reverse=True)
-    # return jsonify(version_list)
 
 @app.route('/operating_systems/<browser>', methods=['GET'])
 def _get_os_list(browser):
-    os_list = []
-    for platform in SauceClient.get_platforms():
-        if platform['api_name'] == browser and not (platform['os'], platform['os']) in os_list:
-            if SauceClient.is_combination_supported(os=platform['os'], browser=platform['long_name'],
-                                                    version=platform['short_version']):
-                os_list.append((platform['os'], platform['os']))
-
-    os_list.sort(key=lambda tup: tup[1])
-
+    os_list = SauceClient.get_operating_systems_for_browser(browser)
     return jsonify(os_list)
